@@ -1,87 +1,27 @@
 <html>
-<h1>Our form</h1>
-<form action="/submit" method="post">
-  <p>
-    {{form.gender.label}}<br>
-    {{form.gender(size=1)}}
-  </p>
-
-  <p>
-    {{form.age.label}}<br>
-    {{form.age(size=5)}}
-  </p>
-
-  <p>
-    {{form.height.label}}<br>
-    {{form.height(size=5)}}
-  </p>
-
-  <p>
-    {{form.weight.label}}<br>
-    {{form.weight(size=5)}}
-  </p>
-
-  <p>
-    {{form.familyhistory.label}}<br>
-    {{form.familyhistory(size=1)}}
-  </p>
-
-  <p>
-    {{form.favc.label}}<br>
-    {{form.favc(size=1)}}
-  </p>
-
-  <p>
-    {{form.fcvc.label}}<br>
-    {{form.fcvc(size=1)}}
-  </p>
-
-  <p>
-    {{form.ncp.label}}<br>
-    {{form.ncp(size=1)}}
-  </p>
-
-  <p>
-    {{form.caec.label}}<br>
-    {{form.caec(size=1)}}
-  </p>
-
-  <p>
-    {{form.smoke.label}}<br>
-    {{form.smoke(size=1)}}
-  </p>
-
-  <p>
-    {{form.ch2o.label}}<br>
-    {{form.ch2o(size=5)}}
-  </p>
-
-  <p>
-    {{form.scc.label}}<br>
-    {{form.scc(size=1)}}
-  </p>
-
-  <p>
-    {{form.faf.label}}<br>
-    {{form.faf(size=5)}}
-  </p>
-
-  <p>
-    {{form.tue.label}}<br>
-    {{form.tue(size=5)}}
-  </p>
-
-  <p>
-    {{form.calc.label}}<br>
-    {{form.calc(size=1)}}
-  </p>
-
-  <p>
-    {{form.mtrans.label}}<br>
-    {{form.mtrans(size=1)}}
-  </p>
-  <button type="submit">Submit</button>
-
-</form>
-
+<head>
+    <title>Obesity Prediction Input</title>
+</head>
+<body>
+    <h1>Obesity Prediction Form</h1>
+    <form action="/" method="post">
+        <p>{{ form.CH2O.label }}<br>{{ form.CH2O(size=30) }}</p>
+        <p>{{ form.SCC.label }}<br>{{ form.SCC }}</p>
+        <p>{{ form.FAF.label }}<br>{{ form.FAF(size=30) }}</p>
+        <p>{{ form.TUE.label }}<br>{{ form.TUE(size=30) }}</p>
+        <p>{{ form.CALC.label }}<br>{{ form.CALC }}</p>
+        <p>{{ form.MTRANS.label }}<br>{{ form.MTRANS }}</p>
+        <p>{{ form.Gender.label }}<br>{{ form.Gender }}</p>
+        <p>{{ form.Age.label }}<br>{{ form.Age(size=30) }}</p>
+        <p>{{ form.Height.label }}<br>{{ form.Height(size=30) }}</p>
+        <p>{{ form.Weight.label }}<br>{{ form.Weight(size=30) }}</p>
+        <p>{{ form.family_history_with_overweight.label }}<br>{{ form.family_history_with_overweight }}</p>
+        <p>{{ form.FAVC.label }}<br>{{ form.FAVC }}</p>
+        <p>{{ form.FCVC.label }}<br>{{ form.FCVC(size=30) }}</p>
+        <p>{{ form.NCP.label }}<br>{{ form.NCP(size=30) }}</p>
+        <p>{{ form.CAEC.label }}<br>{{ form.CAEC }}</p>
+        <p>{{ form.SMOKE.label }}<br>{{ form.SMOKE }}</p>
+        <button type="submit">Submit</button>
+    </form>
+</body>
 </html>
