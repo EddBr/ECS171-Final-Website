@@ -1,35 +1,57 @@
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import Flask, render_template, request
 from flask_wtf import FlaskForm
-from wtforms import StringField,validators,SelectField,IntegerField
+from wtforms import StringField, SelectField, IntegerField, RadioField
+from wtforms.validators import DataRequired  # Checks if user left question empty or not
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = 'mysecretkey'
 
+
+# Define the form with all the features
 class InputForm(FlaskForm):
-    gender = SelectField("What is your gender?", validators=[validators.InputRequired()],choices=[(1,"Female"),(2,"Male")])
-    age = IntegerField("What is your age?", validators=[validators.InputRequired(),validators.NumberRange(min=0)])
-    height = IntegerField("What is your height, in metres?", validators=[validators.InputRequired(),validators.NumberRange(min=0)])
-    weight = IntegerField("What is your weight, in kilograms?", validators=[validators.InputRequired(),validators.NumberRange(min=0)])
-    familyhistory = SelectField("Has a family member suffered or suffers from overweight?", validators=[validators.InputRequired()],choices=[(1,"Male"),(2,"Female")])
-    favc = SelectField("Do you eat high caloric food frequently?", validators=[validators.InputRequired()],choices=[(1,"Yes"),(2,"No")])
-    fcvc = SelectField("Do you usually eat vegetables in your meals?", validators=[validators.InputRequired()],choices=[(1,"Never"),(2,"Sometimes"),(3,"Always")])
-    ncp = SelectField("How many main meals do you have daily?", validators=[validators.InputRequired()],choices=[(1,"Between 1 and 2"),(2,"3"),(3,"More than 3")])
-    caec = SelectField("Do you eat any food between meals?", validators=[validators.InputRequired()],choices=[(1,"No"),(2,"Sometimes"),(3,"Frequently"),(4,"Always")])
-    smoke = SelectField("Do you smoke?", validators=[validators.InputRequired()],choices=[(1,"Yes"),(2,"No")])
-    ch2o = SelectField("How much water do you drink daily?", validators=[validators.InputRequired()],choices=[(1,"Less than a liter"), (2,"Between 1 and 2 litres"), (3,"More than 2 litres")])
-    scc = SelectField("Do you monitor the calories you eat daily?", validators=[validators.InputRequired()],choices=[(1,"Yes"),(2,"No")])
-    faf = SelectField("How often do you have physical activity per week?", validators=[validators.InputRequired()],choices=[(1,"I do not have"),(2,"1 or 2 days"),(3,"2 or 4 days"),(4,"4 or 5 days")])
-    tue = SelectField("How much time do you use technological devices such as cell phone, videogames, television, computer and others?", validators=[validators.InputRequired()],choices=[(1,"0-2 hours"),(2,"3-5 hours"),(3,"More than 5 hours")])
-    calc = SelectField("How often do you drink alcohol?", validators=[validators.InputRequired()],choices=[(1,"I do not drink"),(2,"Sometimes"),(3,"Frequently"),(4,"Always")])
-    mtrans = SelectField("Which transportation do you usually use?", validators=[validators.InputRequired()],choices=[(1,"Automobile"),(2,"Bike"),(3,"Motorbike"),(4,"Public Transportation"),(5,"Walking")])
+    
+    CH2O = IntegerField("How many liters of water do you drink a day?", validators=[DataRequired()])
+    SCC = RadioField("Do you monitor the calories you eat daily?", choices=[('Yes', 'Yes'), ('No', 'No')], validators=[DataRequired()])
+    FAF = IntegerField("How many days in a week do you usually work out?", validators=[DataRequired()])
+    TUE = IntegerField("How many hours per day do you spend on any technological device?", validators=[DataRequired()])
+    CALC = SelectField("How often do you drink alcohol?", choices=[('Never', 'Never'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], validators=[DataRequired()])
+    MTRANS = SelectField("Which transportation do you usually use?", choices=[('Automobile', 'Automobile'), ('Motorbike', 'Motorbike'), ('Bike', 'Bike'), ('Public Transportation', 'Public Transportation'), ('Walking', 'Walking')], validators=[DataRequired()])
+    Gender = RadioField("Gender", choices=[('Male', 'Male'), ('Female', 'Female')], validators=[DataRequired()])
+    Age = IntegerField("Age", validators=[DataRequired()])
+    Height = IntegerField("Height (meters)", validators=[DataRequired()])
+    Weight = IntegerField("Weight (kg)", validators=[DataRequired()])
+    family_history_with_overweight = RadioField("Do you have a family history of weight related issues?", choices=[('Yes', 'Yes'), ('No', 'No')], validators=[DataRequired()])
+    FAVC = RadioField("Do you eat high caloric food frequently?", choices=[('Yes', 'Yes'), ('No', 'No')], validators=[DataRequired()])
+    FCVC = IntegerField("Do you usually eat vegetables in your meals?(1-never, 2-sometimes, 3-always)", validators=[DataRequired()])
+    NCP = IntegerField("How many main meals do you have daily?(1-4)", validators=[DataRequired()])
+    CAEC = SelectField("Do you eat any food between meals?", choices=[('No', 'No'), ('Sometimes', 'Sometimes'), ('Frequently', 'Frequently'), ('Always', 'Always')], validators=[DataRequired()])
+    SMOKE = RadioField("Do you smoke?", choices=[('Yes', 'Yes'), ('No', 'No')], validators=[DataRequired()])
 
 
-@app.route("/")
-def homepage():
+@app.route("/", methods=["GET", "POST"])
+def home():
     form = InputForm()
-    return render_template("./form.html", form=form)
+    if form.validate_on_submit():  #checks to see if user submitted form
+        # Dictionary to store data
+        question_data = {
+            'CH2O': form.CH2O.data,
+            'SCC': form.SCC.data,
+            'FAF': form.FAF.data,
+            'TUE': form.TUE.data,
+            'CALC': form.CALC.data,
+            'MTRANS': form.MTRANS.data,
+            'Gender': form.Gender.data,
+            'Age': form.Age.data,
+            'Height': form.Height.data,
+            'Weight': form.Weight.data,
+            'family_history_with_overweight': form.family_history_with_overweight.data,
+            'FAVC': form.FAVC.data,
+            'FCVC': form.FCVC.data,
+            'NCP': form.NCP.data,
+            'CAEC': form.CAEC.data,
+            'SMOKE': form.SMOKE.data
+        }
+        return render_template("form.html", form=form, question_data=question_data)
+    return render_template("form.html", form=form)
 
-@app.route("/submit",methods=("GET", "POST"))
-def submit_page():
-    if request.method== "POST":
-        return render_template("./submit.html")
+
